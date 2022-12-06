@@ -1,0 +1,287 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$uniqueId = '_' . uniqid();
+
+// Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+
+$writer = new \Zend_Log_Writer_Stream(BP . '/var/log/custom.log');
+        $logger = new \Zend_Log();
+        $logger->addWriter($writer);
+        // $logger->info(print_r($subMenuItem,true));
+
+?>
+<div x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
+     class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex"
+>
+    <!-- desktop -->
+    <div x-ref="nav-desktop"
+         @load.window="setActiveMenu($el)"
+         class="hidden lg:block lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0">
+        <nav
+            class="w-full duration-150 ease-in-out transform flex justify-start
+            w-auto relative min-h-0 transition-display"
+        >
+            <?php foreach ($menuItems as $index => $menuItem): ?>
+                <div class="relative mr-2 level-0"
+                     @mouseenter="hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
+                     @mouseleave="hoverPanelActiveId = 0"
+                >
+                    <span class="flex items-center block p-3 text-md bg-opacity-95">
+                       <?php if (!empty($menuItem['childData'])): ?>
+
+                        <a class="w-full py-3 text-base text-gray-700 level-0 no-underline after:content-['\f107']"
+                           href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                        >
+                            <?= $escaper->escapeHtml($menuItem['name']) ?>
+                        </a>
+                        <?php else: ?>
+                            <a class="w-full py-3 text-base text-gray-700 level-0 no-underline"
+                           href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                        >
+                            <?= $escaper->escapeHtml($menuItem['name']) ?>
+                        </a>
+
+                        <?php endif; ?>
+
+                        
+                    </span>
+                    <?php if (!empty($menuItem['childData'])): ?> <!-- main category -->
+
+                        
+                        <?php if ($menuItem['name']=='Living Room' || $menuItem['name']=='Dining Room' ): ?>  <!-- living room if-->
+                        
+                        <div
+                            class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter bg-opacity-95 flex flex-row w-[850px]"
+                            :class="{
+                                'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
+                            }">
+                            <div class="flex flex-col">
+
+                           <div class="w-full flex flex-row auto-rows-fr">
+
+                           <!-- sub category for loop -->
+
+                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                            <div class=" ">             
+                            
+                            <img id="nav-images"
+                            class="w-[255px] h-[137px] p-[5px] mb-[40px]"
+                            src="<?php echo $escaper->escapeUrl($subMenuItem['image']); ?>">    
+
+                                <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                   class="block px-3 py-1 my-1 whitespace-nowrap first:mt-0 no-underline"
+                                >
+                                    <span class="text-base text-gray-700 text-[14px] font-bold" >
+                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                    </span>
+                                </a>
+                                <ul class="text-[14px] text-gray-600 block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline">
+                                   <? foreach ($subMenuItem['childData'] as $subsubitem): ?>
+                                    <li>
+                                        <span class="text-[14px] text-gray-600">
+                                        <?= $escaper->escapeHtml($subsubitem['name']) ?>
+                                            
+                                        </span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                    
+                                </ul>
+                             </div>
+                            <?php endforeach; ?>
+
+                           <!-- sub category for loop ends -->
+                            </div>
+                            </div>
+                        </div>
+                            <?php endif;?>  <!-- living room if ends-->
+
+                            <?php if ($menuItem['name']=='Bed Room'): ?>  <!-- bedroom category if-->
+                        
+                        <div
+                            class="absolute z-10 hidden px-[30px] py-[40px] -ml-6 shadow-lg bg-container-lighter bg-opacity-95 flex flex-row w-[850px]"
+                            :class="{
+                                'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
+                            }">
+                            <!-- <div class="flex flex-row"> -->
+
+                           <div class="w-full flex flex-col">
+
+                           <div class="flex flex-row w-[790px] pb-[30px] mb-[70px] border-b-[1px] border-gray-300 ">
+                                <div  class="flex flex-row w-1/3">
+                                   <div class="h=[50px] w-[50px] mr-[15px]">
+                                     <i class="fa-solid fa-eye-dropper text-[16px] bg-gray-400 rounded-[100%] p-[16px] "></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-[15px]">Fully Customizable</p>
+                                        <p class="text-[14px]">Lorem ipsum dolor sit amet.</p>
+                                    </div>
+
+                                </div>
+                                <div class="flex flex-row w-1/3">
+                                   <div class="h=[50px] w-[50px] mr-[15px]">
+                                    <i class="fa-sharp fa-solid fa-truck  bg-gray-400 rounded-[100%] p-[16px]"></i>
+                                </div>
+                                    <div>
+                                        <p class="text-[15px]">Fast Shipping</p>
+                                        <p class="text-[14px]">Lorem ipsum dolor sit amet.</p>
+                                    </div>
+
+
+                                </div>
+                                <div  class="flex flex-row w-1/3">
+                                   <div class="h=[50px] w-[50px] mr-[15px]">
+                                    <i class="fa-solid fa-rotate-left  bg-gray-400 rounded-[100%] p-[16px] "></i>
+                                   </div>
+                                    <div>
+                                        <p class="text-[15px]">Easy 30 day Return</p>
+                                        <p class="text-[15px]">Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                           <!-- sub category for loop -->
+                            <div class="flex flex-row w-[800px] ">
+                                <div class="w-[400px] flex flex-row">
+                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                
+                            <div class="w-[195px] h-[186px]">             
+                                                         
+                            <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                   class="block px-3 py-1 my-1 whitespace-nowrap first:mt-0 no-underline"
+                                >
+                                    <span class="text-base text-gray-700 text-[14px] font-bold before:content-[' ']" >
+                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                    </span>
+                                </a>
+                                <ul class="text-[14px] text-gray-600 block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline">
+                                   <? foreach ($subMenuItem['childData'] as $subsubitem): ?>
+                                    <li>
+                                        <span class="text-[14px] text-gray-600">
+                                        <?= $escaper->escapeHtml($subsubitem['name']) ?>
+                                            
+                                        </span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                    
+                                </ul>
+                             </div>
+                            <?php endforeach; ?>
+                                   </div>
+                            <div class="flex flex-row">
+                            <img id="nav-images"
+                            class="w-[190px] h-[150px] p-[5px]"
+                            src="<?php echo $this->getViewFileUrl('Magento_Theme::images/1.jpg'); ?>">
+                            <img id="nav-images"
+                            class="w-[190px] h-[150px] p-[5px]"
+                            src="<?php echo $this->getViewFileUrl('Magento_Theme::images/1.jpg'); ?>">
+                            </div>
+                           </div>
+
+                           <!-- sub category for loop ends -->
+
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                            <?php endif;?>  <!-- bedroom category if ends-->
+
+                            <!-- page if category -->
+                            <?php if ($menuItem['name']=='Pages'): ?> 
+                        
+                        <div
+                            class="absolute z-10 hidden p-[10px] -ml-6 shadow-lg bg-container-lighter bg-opacity-95 flex flex-row w-[250px]"
+                            :class="{
+                                'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
+                            }">
+                            <div class="flex flex-col">
+
+                           <!-- sub category for loop -->
+
+                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                            <div class=" ">             
+                            
+                                <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                   class="block px-3 py-1 my-1 whitespace-nowrap first:mt-0 no-underline"
+                                >
+                                    <span class="text-base text-gray-700 text-[14px] font-bold" >
+                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                    </span>
+                                </a>
+                                <ul class="text-[14px] text-gray-600 block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline">
+                                   <? foreach ($subMenuItem['childData'] as $subsubitem): ?>
+                                    <li>
+                                        <span class="text-[14px] text-gray-600">
+                                        <?= $escaper->escapeHtml($subsubitem['name']) ?>
+                                            
+                                        </span>
+                                    </li>
+                                    <?php endforeach; ?>
+                                    
+                                </ul>
+                             </div>
+                            <?php endforeach; ?>
+
+                           <!-- sub category for loop ends -->
+
+                            </div>
+                        </div>
+                            <?php endif;?> 
+
+                            <!-- page if categoty ends -->
+
+                    <?php endif; ?>  <!-- main category ends -->
+                </div>
+            <?php endforeach; ?>
+        </nav>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+        return {
+            hoverPanelActiveId: null,
+            setActiveMenu(menuNode) {
+                Array.from(menuNode.querySelectorAll('a')).filter(link => {
+                    return link.href === window.location.href.split('?')[0];
+                }).map(item => {
+                    item.classList.add('underline');
+                    item.closest('div.level-0') &&
+                    item.closest('div.level-0').querySelector('a.level-0').classList.add('underline');
+                });
+            }
+        }
+    }
+</script>

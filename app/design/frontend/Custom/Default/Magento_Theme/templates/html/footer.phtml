@@ -1,0 +1,78 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+?>
+
+<div>
+    <div class="max-w-[1200px] flex flex-row m-auto">
+        <div class="p-[15px]">
+            <!-- <img src="../../web/images/moneyback.png" alt=""> -->
+            <img class="w-20 m-auto" src="<?php echo $this->getViewFileUrl('Magento_Theme::images/moneyback.png'); ?>">
+            <h2>Money Back Gaurantee</h2>
+        </div> 
+        <div class="p-[15px] m-auto">
+            <!-- <img src="../../web/images/onlinesupport.png" alt=""> -->
+            <img class="w-20  m-auto" src="<?php echo $this->getViewFileUrl('Magento_Theme::images/onlinesupport.png'); ?>">
+            <h2>Online Support 24/7</h2>
+
+        </div>
+        <div class="p-[15px] m-auto">
+             <!-- <img src="../../web/images/fastshipping.png" alt=""> -->
+            <img class="w-20  m-auto" src="<?php echo $this->getViewFileUrl('Magento_Theme::images/fastshipping.png'); ?>">
+
+            <h2>Fast Shipping</h2>
+
+        </div>
+        <div class="p-[15px]">
+         <!-- <img src="../../web/images/quality.png" alt=""> -->
+            <img class="w-20  m-auto" src="<?php echo $this->getViewFileUrl('Magento_Theme::images/quality.png'); ?>">
+
+            <h2>Product Quality Gaurantee</h2>
+        </div>
+
+    </div>
+</div>
+
+<div class="text-gray-700 body-font bg-container-darker border-t border-container-darker shadow pt-[40px] mt-[60px] pb-16">
+<div class="field-newsletter pt-[170px]  text-center flex flex-col">
+    <p class="text-[23px] mb-[14px]">GET 10% OFF BY SUBSCRIBING TO THE HUMCOMMERCE NEWSLETTER</p>
+    <div class="flex flex-row justify-center content-center">
+    <input name="email" type="email" id="subscribe" placeholder="Your email address" class="border-0 border-b-[1px] border-black bg-[#f5f5f5] mr-[45px]">
+    
+        <a class="text-white bg-black px-[30px] py-[8px]">Send</a>
+    
+    </div> 
+
+</div>
+    <div class="container py-8 mx-auto w-[1200px]">
+        <div class="flex flex-wrap order-first gap-y-16">
+            <?php foreach ($block->getChildNames() as $childName): ?>
+                <?= $childName !== 'footer-copyright' ? $block->getBlockHtml($childName) : '' ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <!-- <div class="bg-container border-t border-b border-container">
+        <div class="container py-6 mx-auto flex items-center sm:flex-row flex-col">
+            <a  href="https://hyva.io"
+                class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+                <span class="ml-3 text-xl">Hyvä Themes</span>
+            </a>
+            <p>
+                <?= $block->getChildHtml('copyright') ?>
+            </p>
+        </div>
+    </div> -->
+</div>
+
